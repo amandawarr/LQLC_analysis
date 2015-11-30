@@ -45,7 +45,7 @@ We used samtools to call variants on the bam file as follows:
 samtools mpileup -uf ref.fa reads.bam | bcftools view -bvcg - > var.raw.bcf
 bcftools view var.raw.bcf | vcfutils.pl varFilter -D100 > var.flt.vcf
 
-We filtered the vcd for homozygous variants and took 100 bases either side of the variant as abnormal.
+We filtered the vcf for homozygous variants and took 100 bases either side of the variant as abnormal. Make sure the ends of these regions aren't below 0 or above the full length of the chromosome!
 
 
 
