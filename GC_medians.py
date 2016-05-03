@@ -1,3 +1,4 @@
+from __future__ import division
 import numpy as np
 import sys
 #################################################################################
@@ -9,26 +10,24 @@ import sys
 #################################################################################
 
 out=open(sys.argv[2],'w')
+perc_dict={}
+#Open bed file with 5 columns (chr, st, end, [readcount|coverage], GC content)
+with open(sys.argv[1], 'r') as data:
+	for line in data:
+		line=line.rstrip()
+		line=line.split("\t")
+		#For each line add coverage to dict entry for GC content
+		if str("%.3f"%float(line[4])) in perc_dict.keys():
+			perc_dict[str("%.3f"%float(line[4]))].append(float(line[3]))
+		else:
+			perc_dict[str("%.3f"%float(line[4]))]=(float(line[3]))			
 
-#loop through values 0-1, to 3dp
-for f in [float(j) / 1000 for j in range(0, 1001, 1)]:
-			
-#For each possible % GC content (f) find matching values in column 5 
-#for matching values, append the read count||depth from column 4 to r
 
-	r=[]
-	#Open bed file with 5 columns (chr, st, end, [readcount|coverage], GC content)
-	with open(sys.argv[1], 'r') as data:
-		for line in data:
-			line=line.rstrip()
-			line=line.split("\t")
-	
-			if "%.3f"%float(line[4])=="%.3f"%float(f):
-				r.append(float(line[3]))			
-	#If there are values in the array, calculate the median and write, else write median as 0
-	if len(r)!=0:
-		out.write(str(f)+ "\t" + str(np.median(r)) + "\n")
+#For each possible GC percentage, calculate the median and write, if there are no entries write median as 0
+for item in [float(j) / 1000 for j in range(0, 1001, 1)]:
+	if str(item) not in perc_dict.keys():
+		out.write(str(item)+ "\t" + str(np.median(perc_dict[item])) + "\n")
 	else:
-		out.write(str(f)+ "\t0\n")
+		out.write(str(item)+ "\t0\n")
 
 out.close()
