@@ -24,7 +24,7 @@ with open(sys.argv[1], 'r') as data:
 
 
 #For each possible GC percentage, calculate the median and write, if there are no entries write median as 0
-for item in [float(j) / 1000 for j in range(0, 1001, 1)]:
+for %.3f"%item in [float(j) / 1000 for j in range(0, 1001, 1)]:
 	if str(item) in perc_dict.keys():
 		out.write(str(item)+ "\t" + str(np.median(perc_dict[str(item)])) + "\n")
 	else:
